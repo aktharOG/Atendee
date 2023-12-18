@@ -33,12 +33,12 @@ class AuthProvider extends ChangeNotifier {
         if (res.data["user"] == "student") {
           prefrenceService.saveString(res.data["userid"]);
           prefrenceService.saveUserType(res.data["user"]);
-          push(context, StudentHome());
+          pushAndRemoveUntil(context, StudentHome());
           showSnackBar(context, res.data["message"]);
         } else {
             prefrenceService.saveString(res.data["userid"]);
           prefrenceService.saveUserType(res.data["user"]);
-          push(context, TeacherHome());
+          pushAndRemoveUntil(context, TeacherHome());
           showSnackBar(context, res.data["message"]);
         }
       }else{

@@ -53,6 +53,7 @@ class StudentProfilePage extends StatelessWidget {
                     ],
                   ),
                   CircleAvatar(
+                  
                     radius: 60,
                     backgroundImage: CachedNetworkImageProvider(
                         baseUrl + homePro.profileModelSTD!.data.image),

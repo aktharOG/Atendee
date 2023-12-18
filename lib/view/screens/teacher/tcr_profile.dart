@@ -1,6 +1,7 @@
 import 'package:attendee/logout.dart';
 import 'package:attendee/services/dio_service.dart';
 import 'package:attendee/view/provider/home_provider.dart';
+import 'package:attendee/view/widgets/profile_item.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -72,14 +73,19 @@ class TeacherProfilePage extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text('Age: $userAge years'),
-                  Text(
-                      'Sex: ${homePro.profileModelTCR?.data.gender ?? userSex}'),
-                  Text('Date of Birth: $userDob'),
-                  Text(
-                      'Address: ${homePro.profileModelTCR?.data.teacherAddress}'),
-                  Text(
-                      'Contact Number: ${homePro.profileModelTCR?.data.phone ?? userContact}'),
+                  ProfileItem(title: "Age: ", value: "$userAge years"),
+                  ProfileItem(
+                      title: "Sex: ",
+                      value: homePro.profileModelTCR?.data.gender ?? userSex),
+                  ProfileItem(title: "Date of Birth:", value: userDob),
+                  ProfileItem(
+                      title: "Address: ",
+                      value: homePro.profileModelTCR?.data.teacherAddress ??
+                          'no address'),
+                  ProfileItem(
+                      title: "Contact Number: ",
+                      value:
+                          homePro.profileModelTCR?.data.phone ?? userContact),
                 ],
               ),
             ),

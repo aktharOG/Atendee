@@ -1,86 +1,78 @@
+import 'package:attendee/view/provider/home_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class StudentTimetablePage extends StatelessWidget {
+class StudentTimetablePage extends StatefulWidget {
+  const StudentTimetablePage({super.key});
+
+  @override
+  State<StudentTimetablePage> createState() => _StudentTimetablePageState();
+}
+
+class _StudentTimetablePageState extends State<StudentTimetablePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final homePro = Provider.of<HomeProvider>(context, listen: false);
+
+      homePro.onFetchTimeTable();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Class Timetable'),
-      // ),
-      body: Timetable(),
+    final homePro = Provider.of<HomeProvider>(context);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        homePro.onFetchTimeTable();
+      },
+      child: const Scaffold(
+        // appBar: AppBar(
+        //   title: Text('Class Timetable'),
+        // ),
+        body: Timetable(),
+      ),
     );
   }
 }
 
 class Timetable extends StatelessWidget {
+  const Timetable({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection:Axis.horizontal ,
-      child: DataTable(
-        columns: [
-          DataColumn(label: Text('Day')),
-          DataColumn(label: Text('Period 1')),
-          DataColumn(label: Text('Period 2')),
-          DataColumn(label: Text('Period 3')),
-          DataColumn(label: Text('Period 4')),
-          DataColumn(label: Text('Period 5')),
-          DataColumn(label: Text('Period 6')),
-          DataColumn(label: Text('Period 7')),
-        ],
-        rows: [
-          DataRow(cells: [
-            DataCell(Text('Monday')),
-            DataCell(Text('Class A')),
-            DataCell(Text('Class B')),
-            DataCell(Text('Class C')),
-            DataCell(Text('Class D')),
-            DataCell(Text('Class E')),
-            DataCell(Text('Class F')),
-            DataCell(Text('Class G')),
-          ]),
-          DataRow(cells: [
-            DataCell(Text('Tuesday')),
-            DataCell(Text('Class H')),
-            DataCell(Text('Class I')),
-            DataCell(Text('Class J')),
-            DataCell(Text('Class K')),
-            DataCell(Text('Class L')),
-            DataCell(Text('Class M')),
-            DataCell(Text('Class N')),
-          ]),
-          DataRow(cells: [
-            DataCell(Text('Wednesday')),
-            DataCell(Text('Class O')),
-            DataCell(Text('Class P')),
-            DataCell(Text('Class Q')),
-            DataCell(Text('Class R')),
-            DataCell(Text('Class S')),
-            DataCell(Text('Class T')),
-            DataCell(Text('Class U')),
-          ]),
-          DataRow(cells: [
-            DataCell(Text('Thursday')),
-            DataCell(Text('Class V')),
-            DataCell(Text('Class W')),
-            DataCell(Text('Class X')),
-            DataCell(Text('Class Y')),
-            DataCell(Text('Class Z')),
-            DataCell(Text('Class AA')),
-            DataCell(Text('Class AB')),
-          ]),
-          DataRow(cells: [
-            DataCell(Text('Friday')),
-            DataCell(Text('Class AC')),
-            DataCell(Text('Class AD')),
-            DataCell(Text('Class AE')),
-            DataCell(Text('Class AF')),
-            DataCell(Text('Class AG')),
-            DataCell(Text('Class AH')),
-            DataCell(Text('Class AI')),
-          ]),
-        ],
-      ),
-    );
+    final homePro = Provider.of<HomeProvider>(context);
+    return homePro.isTimeTableLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: DataTable(
+                columns: const [
+                  DataColumn(label: Text('Day')),
+                  DataColumn(label: Text('Period 1')),
+                  DataColumn(label: Text('Period 2')),
+                  DataColumn(label: Text('Period 3')),
+                  DataColumn(label: Text('Period 4')),
+                  DataColumn(label: Text('Period 5')),
+                  DataColumn(label: Text('Period 6')),
+                  DataColumn(label: Text('Period 7')),
+                ],
+                rows: homePro.timeTableModel!.data
+                    .map((e) => DataRow(cells: [
+                          DataCell(Text(e.day)),
+                          DataCell(Text(e.h1)),
+                          DataCell(Text(e.h2)),
+                          DataCell(Text(e.h3)),
+                          DataCell(Text(e.h4)),
+                          DataCell(Text(e.h5)),
+                          DataCell(Text(e.h6)),
+                          DataCell(Text(e.h1)),
+                        ]))
+                    .toList()),
+          );
   }
 }
