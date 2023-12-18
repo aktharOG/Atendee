@@ -137,11 +137,14 @@ class HourItem extends StatefulWidget {
   bool isChecked;
   final String studentID;
   final String classID;
+  final bool isEditable;
   HourItem(
       {super.key,
       required this.hour,
       required this.studentID,
-      required this.classID,this.isChecked=true});
+      required this.classID,this.isChecked=true,
+      this.isEditable = true
+      });
 
   @override
   State<HourItem> createState() => _HourItemState();
@@ -154,7 +157,8 @@ class _HourItemState extends State<HourItem> {
 
     return ListTile(
       onTap: () {
-        homePro.onMarkAttendence(
+        if(widget.isEditable){
+  homePro.onMarkAttendence(
           context,
           classID: widget.classID,
           teacherID: homePro.profileModelTCR!.data.teacherId,
@@ -165,22 +169,25 @@ class _HourItemState extends State<HourItem> {
         setState(() {
           widget.isChecked = !widget.isChecked;
         });
+        }
+      
       },
       title: Text(widget.hour),
       trailing: InkWell(
         onTap: () {
-          setState(() {
-            homePro.onMarkAttendence(
-              context,
-              classID: widget.classID,
-              teacherID: homePro.profileModelTCR!.data.teacherId,
-              studentID: widget.studentID,
-              hour: "h6",
-              date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
-            );
-
-            widget.isChecked = !widget.isChecked;
-          });
+          if(widget.isEditable){
+  homePro.onMarkAttendence(
+          context,
+          classID: widget.classID,
+          teacherID: homePro.profileModelTCR!.data.teacherId,
+          studentID: widget.studentID,
+          hour: "h6",
+          date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
+        );
+        setState(() {
+          widget.isChecked = !widget.isChecked;
+        });
+        }
         },
         child: Container(
           width: 24,

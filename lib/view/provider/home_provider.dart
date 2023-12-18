@@ -152,6 +152,8 @@ class HomeProvider extends ChangeNotifier {
     }
   }
 
+bool  isAttendanceLoading =false;
+
   onGetAttendenceList(studentID, date) async {
     final data = {"studentid": studentID, "date": date};
     Response? res = await ApiService.apiMethodSetup(

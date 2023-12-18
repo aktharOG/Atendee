@@ -1,5 +1,8 @@
 import 'package:attendee/view/provider/home_provider.dart';
+import 'package:attendee/view/screens/teacher/mark_attendance.dart';
+import 'package:attendee/view/widgets/heading_text.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class StudentAttendancePage extends StatefulWidget {
@@ -22,6 +25,9 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final homePro = Provider.of<HomeProvider>(context, listen: false);
       homePro.onGetStudentsList();
+
+      homePro.onGetAttendenceList(homePro.profileModelSTD?.data.studentId,
+          DateFormat('yyyy-MM-dd').format(DateTime.now()).toString());
     });
   }
 
@@ -30,19 +36,102 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
     final homePro = Provider.of<HomeProvider>(context);
 
     return Scaffold(
-      body: ListView.builder(
-        itemCount: homePro.studentModel?.data.length,
-        itemBuilder: (context, index) {
-          final studentItem = homePro.studentModel?.data[index];
-          return ListTile(
-            title: Text(studentItem?.studentName ?? 'no name'),
-            trailing: students[index].isPresent
-                ? const Icon(Icons.check, color: Colors.green)
-                : const Icon(Icons.close, color: Colors.red),
-          );
-        },
-      ),
-    );
+        body: Column(
+      children: [
+        ListTile(
+          title: Text(
+            homePro.profileModelSTD?.data.studentName ?? 'no name',
+            style: const TextStyle(fontSize: 20),
+          ),
+          trailing: InkWell(
+            onTap: () async {
+              await showDatePicker(
+                      context: context,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime.now(),
+                      onDatePickerModeChange: (value) {})
+                  .then((value) {
+                if (value != null) {
+                  homePro.onGetAttendenceList(
+                      homePro.profileModelSTD?.data.studentId,
+                      DateFormat('yyyy-MM-dd').format(value).toString());
+                }
+              });
+            },
+            child: const Icon(Icons.calendar_month),
+          ),
+          // trailing: students[index].isPresent
+          //     ? const Icon(Icons.check, color: Colors.green)
+          //     : const Icon(Icons.close, color: Colors.red),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Divider(),
+        if (homePro.attendanceModel!.data.isNotEmpty)
+          HeadingText(
+            text: DateFormat('yyyy-MM-dd')
+                .format(homePro.attendanceModel!.data[0].date)
+                .toString()
+                .toString(),
+            fontSize: 16,
+          ),
+        const SizedBox(
+          height: 30,
+        ),
+        HourItem(
+          hour: "h1",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h1 ?? true,
+        ),
+        HourItem(
+          hour: "h2",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h2 ?? true,
+        ),
+        HourItem(
+          hour: "h3",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h3 ?? true,
+        ),
+        HourItem(
+          hour: "h4",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h4 ?? true,
+        ),
+        HourItem(
+          hour: "h5",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h5 ?? true,
+        ),
+        HourItem(
+          hour: "h6",
+          classID: homePro.profileModelSTD?.data.clasId ?? '',
+          studentID: homePro.profileModelSTD?.data.studentId ?? "",
+          isChecked: homePro.attendanceModel!.data.isEmpty
+              ? true
+              : homePro.attendanceModel?.data[0].h6 ?? true,
+        ),
+      ],
+    ));
+    //   },
+    //  ),
+    //  );
   }
 }
 
