@@ -80,6 +80,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
           height: 30,
         ),
         HourItem(
+          isEditable: false,
           hour: "h1",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",
@@ -88,6 +89,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               : homePro.attendanceModel?.data[0].h1 ?? true,
         ),
         HourItem(
+          isEditable: false,
           hour: "h2",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",
@@ -96,6 +98,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               : homePro.attendanceModel?.data[0].h2 ?? true,
         ),
         HourItem(
+          isEditable: false,
           hour: "h3",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",
@@ -104,6 +107,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               : homePro.attendanceModel?.data[0].h3 ?? true,
         ),
         HourItem(
+          isEditable: false,
           hour: "h4",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",
@@ -112,6 +116,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               : homePro.attendanceModel?.data[0].h4 ?? true,
         ),
         HourItem(
+          isEditable: false,
           hour: "h5",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",
@@ -120,6 +125,7 @@ class _StudentAttendancePageState extends State<StudentAttendancePage> {
               : homePro.attendanceModel?.data[0].h5 ?? true,
         ),
         HourItem(
+          isEditable: false,
           hour: "h6",
           classID: homePro.profileModelSTD?.data.clasId ?? '',
           studentID: homePro.profileModelSTD?.data.studentId ?? "",

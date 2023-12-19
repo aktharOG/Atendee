@@ -10,7 +10,7 @@ String studentModelToJson(StudentModel data) => json.encode(data.toJson());
 
 class StudentModel {
     String message;
-    List<Datum> data;
+    List<StudentListML> data;
 
     StudentModel({
         required this.message,
@@ -19,7 +19,7 @@ class StudentModel {
 
     factory StudentModel.fromJson(Map<String, dynamic> json) => StudentModel(
         message: json["Message"],
-        data: List<Datum>.from(json["Data"].map((x) => Datum.fromJson(x))),
+        data: List<StudentListML>.from(json["Data"].map((x) => StudentListML.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -28,7 +28,7 @@ class StudentModel {
     };
 }
 
-class Datum {
+class StudentListML {
     String studentId;
     String userIdId;
     String studentName;
@@ -39,7 +39,7 @@ class Datum {
     String clasId;
     String image;
 
-    Datum({
+    StudentListML({
         required this.studentId,
         required this.userIdId,
         required this.studentName,
@@ -51,7 +51,7 @@ class Datum {
         required this.image,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory StudentListML.fromJson(Map<String, dynamic> json) => StudentListML(
         studentId: json["student_id"],
         userIdId: json["user_id_id"],
         studentName: json["student_name"],

@@ -31,6 +31,12 @@ class HomeProvider extends ChangeNotifier {
   bool isNotificationLoading = false;
   bool isTimeTableLoading = false;
 
+
+  // picked date by teacher
+   DateTime? dateTime;
+
+    
+
   // get student notification
 
   getNotificationStudents() async {
@@ -133,13 +139,15 @@ class HomeProvider extends ChangeNotifier {
       required String teacherID,
       required String studentID,
       required String hour,
-      required String date}) async {
+      required String date,
+      required int flag}) async {
     final data = {
       "classid": classID,
       "teacherid": teacherID,
       "studentid": studentID,
       "hour": hour,
-      "date": date
+      "date": date,
+      "flag": flag
     };
     print(data);
     Response? res = await ApiService.apiMethodSetup(
@@ -149,12 +157,15 @@ class HomeProvider extends ChangeNotifier {
     if (res != null) {
       print(res.data);
       showSnackBar(context, res.data["message"]);
+      onGetAttendenceList(studentID, date);
     }
   }
 
-bool  isAttendanceLoading =false;
+  bool isAttendanceLoading = false;
 
   onGetAttendenceList(studentID, date) async {
+    isAttendanceLoading = true;
+    notifyListeners();
     final data = {"studentid": studentID, "date": date};
     Response? res = await ApiService.apiMethodSetup(
         method: apiMethod.post,
@@ -164,6 +175,8 @@ bool  isAttendanceLoading =false;
       print(res.data);
 
       attendanceModel = attendanceModelFromJson(jsonEncode(res.data));
+          isAttendanceLoading = false;
+
       notifyListeners();
     }
   }

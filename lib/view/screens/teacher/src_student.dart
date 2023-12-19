@@ -1,4 +1,9 @@
+import 'package:attendee/view/model/notification_model.dart';
+import 'package:attendee/view/model/student_model.dart';
+import 'package:attendee/view/provider/home_provider.dart';
+import 'package:attendee/view/screens/student/std_attendence.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StudentSearch extends StatefulWidget {
   @override
@@ -6,20 +11,34 @@ class StudentSearch extends StatefulWidget {
 }
 
 class _StudentSearchState extends State<StudentSearch> {
-  final List<Student> allStudents = [
-    Student(id: '101', name: 'John', profile: 'Profile for John...'),
-    Student(id: '102', name: 'Alice', profile: 'Profile for Alice...'),
-    // Add more students
-  ];
+  // final List<Student> allStudents = [
+  //   Student(id: '101', name: 'John', profile: 'Profile for John...'),
+  //   Student(id: '102', name: 'Alice', profile: 'Profile for Alice...'),
+  //   // Add more students
+  // ];
 
-  List<Student> searchResults = [];
+
+  List<StudentListML> searchResults = [];
 
   void searchStudent(String query) {
+    final homePro = Provider.of<HomeProvider>(context, listen: false);
     setState(() {
-      searchResults = allStudents.where((student) {
-        return student.name.toLowerCase().contains(query.toLowerCase()) ||
-            student.id.toLowerCase().contains(query.toLowerCase());
+      searchResults = homePro.studentModel!.data.where((student) {
+        return student.studentName
+                .toLowerCase()
+                .contains(query.toLowerCase()) ||
+            student.studentId.toLowerCase().contains(query.toLowerCase());
       }).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final homePro = Provider.of<HomeProvider>(context, listen: false);
+      homePro.onGetStudentsList();
     });
   }
 
@@ -46,8 +65,9 @@ class _StudentSearchState extends State<StudentSearch> {
               itemCount: searchResults.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(searchResults[index].name),
-                  subtitle: Text(searchResults[index].id),
+                  title: Text(searchResults[index].studentName),
+                  subtitle:
+                      Text("studentID : ${searchResults[index].studentId}"),
                   onTap: () {
                     // Navigate to the student's profile page or display it here
                     // For simplicity, we're displaying it on the same page
@@ -55,8 +75,9 @@ class _StudentSearchState extends State<StudentSearch> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text(searchResults[index].name),
-                          content: Text(searchResults[index].profile),
+                          title: Text(searchResults[index].studentName),
+                          content: Text(
+                              "studentID : ${searchResults[index].studentId}"),
                           actions: <Widget>[
                             TextButton(
                               onPressed: () {
@@ -79,10 +100,10 @@ class _StudentSearchState extends State<StudentSearch> {
   }
 }
 
-class Student {
-  final String id;
-  final String name;
-  final String profile;
+// class Student {
+//   final String id;
+//   final String name;
+//   final String profile;
 
-  Student({required this.id, required this.name, required this.profile});
-}
+//   Student({required this.id, required this.name, required this.profile});
+// }

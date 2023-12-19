@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:attendee/view/model/student_model.dart';
 import 'package:attendee/view/provider/home_provider.dart';
 import 'package:attendee/view/widgets/heading_text.dart';
@@ -6,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MarkAttendenceScreen extends StatefulWidget {
-  final Datum studentModel;
+  final StudentListML studentModel;
   const MarkAttendenceScreen({super.key, required this.studentModel});
 
   @override
@@ -40,94 +42,115 @@ class _MarkAttendenceScreenState extends State<MarkAttendenceScreen> {
           ),
           backgroundColor: const Color.fromRGBO(233, 240, 255, 1),
           iconTheme: const IconThemeData(color: Colors.black)),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 50,
+      body: homePro.isAttendanceLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      HeadingText(
+                        text: widget.studentModel.studentName,
+                        fontSize: 30,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      InkWell(
+                          onTap: () async {
+                            await showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime.now(),
+                                    onDatePickerModeChange: (value) {})
+                                .then((value) {
+                              if (value != null) {
+                                homePro.onGetAttendenceList(
+                                    widget.studentModel.studentId,
+                                    DateFormat('yyyy-MM-dd')
+                                        .format(value)
+                                        .toString());
+                                    setState(() {
+                                      homePro.dateTime = value;
+
+                                    });
+                              }
+                            });
+                          },
+                          child: const Icon(Icons.calendar_month))
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  if (homePro.attendanceModel!.data.isNotEmpty)
+                    HeadingText(
+                      text: DateFormat('yyyy-MM-dd')
+                          .format(homePro.attendanceModel!.data[0].date)
+                          .toString()
+                          .toString(),
+                      fontSize: 16,
+                    ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  HourItem(
+                    hour: "h1",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h1 ?? true,
+                  ),
+                  HourItem(
+                    hour: "h2",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h2 ?? true,
+                  ),
+                  HourItem(
+                    hour: "h3",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h3 ?? true,
+                  ),
+                  HourItem(
+                    hour: "h4",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h4 ?? true,
+                  ),
+                  HourItem(
+                    hour: "h5",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h5 ?? true,
+                  ),
+                  HourItem(
+                    hour: "h6",
+                    classID: widget.studentModel.clasId,
+                    studentID: widget.studentModel.studentId,
+                    isChecked: homePro.attendanceModel!.data.isEmpty
+                        ? false
+                        : homePro.attendanceModel?.data[0].h6 ?? true,
+                  ),
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                HeadingText(
-                  text: widget.studentModel.studentName,
-                  fontSize: 30,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                    onTap: () async {
-                      await showDatePicker(
-                              context: context,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime.now(),
-                              onDatePickerModeChange: (value) {})
-                          .then((value) {
-                        if (value != null) {
-                          homePro.onGetAttendenceList(
-                              widget.studentModel.studentId,
-                              DateFormat('yyyy-MM-dd')
-                                  .format(value)
-                                  .toString());
-                        }
-                      });
-                    },
-                    child: const Icon(Icons.calendar_month))
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            if(homePro.attendanceModel!.data.isNotEmpty)
-            HeadingText(
-                text: DateFormat('yyyy-MM-dd')
-                    .format(homePro.attendanceModel!.data[0].date)
-                    .toString()
-                    .toString(),fontSize: 16,),
-            const SizedBox(
-              height: 30,
-            ),
-            HourItem(
-            
-              hour: "h1",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-              isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h1??true,
-            ),
-            HourItem(
-              hour: "h2",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-                isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h2??true,
-            ),
-            HourItem(
-              hour: "h3",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-                isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h3??true,
-            ),
-            HourItem(
-              hour: "h4",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-                isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h4??true,
-            ),
-            HourItem(
-              hour: "h5",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-                isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h5??true,
-            ),
-            HourItem(
-              hour: "h6",
-              classID: widget.studentModel.clasId,
-              studentID: widget.studentModel.studentId,
-                isChecked:homePro.attendanceModel!.data.isEmpty?true: homePro.attendanceModel?.data[0].h6??true,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -142,9 +165,9 @@ class HourItem extends StatefulWidget {
       {super.key,
       required this.hour,
       required this.studentID,
-      required this.classID,this.isChecked=true,
-      this.isEditable = true
-      });
+      required this.classID,
+      this.isChecked = false,
+      this.isEditable = true});
 
   @override
   State<HourItem> createState() => _HourItemState();
@@ -157,37 +180,49 @@ class _HourItemState extends State<HourItem> {
 
     return ListTile(
       onTap: () {
-        if(widget.isEditable){
-  homePro.onMarkAttendence(
-          context,
-          classID: widget.classID,
-          teacherID: homePro.profileModelTCR!.data.teacherId,
-          studentID: widget.studentID,
-          hour: "h6",
-          date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
-        );
-        setState(() {
-          widget.isChecked = !widget.isChecked;
-        });
+        if (widget.isEditable) {
+          if(homePro.dateTime!=null){
+homePro.onMarkAttendence(context,
+              classID: widget.classID,
+              teacherID: homePro.profileModelTCR!.data.teacherId,
+              studentID: widget.studentID,
+              hour: widget.hour,
+              date: DateFormat('yyyy-MM-dd').format(homePro.dateTime!).toString(),
+              flag: widget.isChecked ? 1 : 0);
+          setState(() {
+            widget.isChecked = !widget.isChecked;
+          });
+          }else{
+homePro.onMarkAttendence(context,
+              classID: widget.classID,
+              teacherID: homePro.profileModelTCR!.data.teacherId,
+              studentID: widget.studentID,
+              hour: widget.hour,
+              date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
+              flag: widget.isChecked ? 1 : 0);
+          setState(() {
+            widget.isChecked = !widget.isChecked;
+          });
+          }
+          
         }
-      
       },
       title: Text(widget.hour),
       trailing: InkWell(
         onTap: () {
-          if(widget.isEditable){
-  homePro.onMarkAttendence(
-          context,
-          classID: widget.classID,
-          teacherID: homePro.profileModelTCR!.data.teacherId,
-          studentID: widget.studentID,
-          hour: "h6",
-          date: DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
-        );
-        setState(() {
-          widget.isChecked = !widget.isChecked;
-        });
-        }
+          if (widget.isEditable) {
+            homePro.onMarkAttendence(context,
+                classID: widget.classID,
+                teacherID: homePro.profileModelTCR!.data.teacherId,
+                studentID: widget.studentID,
+                hour: "h6",
+                date:
+                    DateFormat('yyyy-MM-dd').format(DateTime.now()).toString(),
+                flag: widget.isChecked ? 1 : 0);
+            setState(() {
+              widget.isChecked = !widget.isChecked;
+            });
+          }
         },
         child: Container(
           width: 24,

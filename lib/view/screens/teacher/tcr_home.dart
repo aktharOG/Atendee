@@ -36,6 +36,7 @@ class _TeacherHomeState extends State<TeacherHome> {
       homePro.getNotificationTeachers();
       String userID = prefrenceService.getString();
       homePro.onFetchProfile(userID, isTcr: true);
+      homePro.onGetStudentsList();
     });
   }
 
